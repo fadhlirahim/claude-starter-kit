@@ -1,0 +1,21 @@
+{
+  "name": "claude-starter-kit",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vinxi dev",
+    "build": "vinxi build",
+    "start": "vinxi start",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "check:unsafe": "biome check --write --unsafe .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:auth": "bunx @better-auth/cli@latest generate"
+  }
+}
