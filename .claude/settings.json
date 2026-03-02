@@ -35,6 +35,11 @@
       "Bash(git clean -f)"
     ]
   },
+  "enabledPlugins": {
+    "code-review@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true
+  },
   "hooks": {
     "UserPromptSubmit": [
       {

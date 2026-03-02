@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # After substantial TypeScript changes, block Claude from finishing and ask it to
-# run the code-simplifier then code-reviewer before wrapping up.
+# run /simplify then code-reviewer before wrapping up.
 #
 # Threshold: 3+ modified TypeScript source files (excludes tests and generated files).
 # Loop protection: stop_hook_active prevents re-triggering after review completes.
@@ -31,5 +31,5 @@ jq -n \
 	--arg files "$FILE_LIST" \
 	'{
     decision: "block",
-    reason: ("Implementation complete: " + ($count | tostring) + " TypeScript files modified (" + $files + "). Before finishing, please:\n1. Run the code-simplifier agent on the changed files to clean up.\n2. Run the code-reviewer agent to verify conventions (auth guards, Zod 4 patterns, tRPC usage, type safety).\n3. Run `bun typecheck && bun check` to verify everything passes.")
+    reason: ("Implementation complete: " + ($count | tostring) + " TypeScript files modified (" + $files + "). Before finishing, please:\n1. Run /simplify on the changed files to clean up.\n2. Run the code-reviewer agent to verify conventions (auth guards, Zod 4 patterns, tRPC usage, type safety).\n3. Run `bun typecheck && bun check` to verify everything passes.")
   }'
