@@ -116,28 +116,52 @@ Shell scripts in `.claude/hooks/` wired to lifecycle events in `settings.json`. 
 | `test-writer` | Generates vitest tests for tRPC routers, Zod schemas, and React components. |
 | `fullstack-builder` | Builds complete features in the correct order: schema, migration, validators, router, route, components. |
 
-## Usage
+## Install
 
-### Starting a New Project
-
-1. Clone this repo or copy the files into your project root
-2. Edit `CLAUDE.md` — replace `[App Name]` with your project name
-3. Copy `.env.example` to `.env` and fill in your values
-4. Initialize your TanStack Start project (if not already done)
-5. Start Claude Code — it will read `CLAUDE.md` and `.claude/settings.json` automatically
-
-### Adding to an Existing Project
-
-Copy these files into your project root:
+The fastest way is the install script. It works for both fresh projects and existing repos. Run it from the directory you want the kit applied to:
 
 ```bash
-# Copy the Claude Code configuration
+curl -fsSL https://raw.githubusercontent.com/fadhlirahim/claude-starter-kit/main/install.sh | bash
+```
+
+Or pass a target directory:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/fadhlirahim/claude-starter-kit/main/install.sh | bash -s -- /path/to/your-project
+```
+
+Prefer to inspect first? Clone and run locally:
+
+```bash
+git clone https://github.com/fadhlirahim/claude-starter-kit.git
+cd /path/to/your-project
+bash /path/to/claude-starter-kit/install.sh
+```
+
+### What the installer does
+
+- **Kit-owned files** (`CLAUDE.md`, `biome.json`, `.claude/**`) are written into your project. If a file already exists with different content, the existing file is renamed to `<file>.bak` first — nothing is silently clobbered.
+- **User-owned files** (`package.json`, `.gitignore`) are **never** overwritten. If they already exist, the installer prints suggested additions for you to merge by hand.
+- `.env.example` is copied only if you don't already have one.
+- Hook scripts under `.claude/hooks/` are made executable.
+- Re-running the installer is safe — files identical to the kit are reported as unchanged, no duplicate `.bak` files are created.
+
+After install:
+
+1. Open `CLAUDE.md` and replace `[App Name]` with your project name.
+2. Copy `.env.example` to `.env` and fill in values.
+3. Restart Claude Code so it picks up the new settings and hooks.
+
+### Manual install (fallback)
+
+If you can't run the script, copy by hand:
+
+```bash
 cp -r .claude/ /path/to/your-project/.claude/
 cp CLAUDE.md /path/to/your-project/
 cp biome.json /path/to/your-project/
+chmod +x /path/to/your-project/.claude/hooks/*.sh
 ```
-
-Then customize `CLAUDE.md` to match your project's specific structure and conventions.
 
 ### Daily Workflow
 
