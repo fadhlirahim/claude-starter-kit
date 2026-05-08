@@ -36,7 +36,8 @@ package.json                       # Script definitions
     post-implement-review.sh       #   Force review when 3+ files changed
     notify-macos.sh                #   Desktop notification (permission/idle)
     stop-notify.sh                 #   Desktop notification when Claude finishes
-  skills/                          # 14 slash commands
+  skills/                          # 15 slash commands
+    setup/SKILL.md                 #   /setup — bootstrap the TanStack Start app from zero
     push/SKILL.md                  #   /push — commit, push, and create PR
     commit/SKILL.md                #   /commit — auto-generate commit message
     clean-branches/SKILL.md        #   /clean-branches — prune stale local branches
@@ -92,6 +93,7 @@ Shell scripts in `.claude/hooks/` wired to lifecycle events in `settings.json`. 
 
 | Command | What It Does |
 |---------|-------------|
+| `/setup` | Bootstraps the project from zero: installs deps, wires Drizzle + better-auth + tRPC + TanStack Router, scaffolds the root/auth layouts, and verifies with a login round-trip. Run this once, right after `install.sh`. |
 | `/push` | Commits, pushes, and creates a PR with comprehensive description — analyzes all branch commits, groups changes by area, includes test plan |
 | `/commit` | Stages and commits with an auto-generated message matching your repo's conventional commit style |
 | `/clean-branches` | Prunes local branches deleted from remote (fetches, finds `[gone]`, removes worktrees, deletes) |
@@ -151,6 +153,7 @@ After install:
 1. Open `CLAUDE.md` and replace `[App Name]` with your project name.
 2. Copy `.env.example` to `.env` and fill in values.
 3. Restart Claude Code so it picks up the new settings and hooks.
+4. **Fresh project?** Run `/setup` — it bootstraps the TanStack Start app (deps, Drizzle, better-auth, tRPC, root/auth layouts) and verifies with a login round-trip. Skip this if you're adding the kit to a project that already has `src/`.
 
 ### Manual install (fallback)
 
