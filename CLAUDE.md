@@ -32,6 +32,20 @@ bun test             # Run tests with vitest
 bun typecheck        # TypeScript type checking
 ```
 
+## Workflow
+
+### Layered commits during plan implementation
+
+When executing a multi-step plan autonomously, commit work in logical chunks as each meaningful unit completes — don't accumulate everything for one giant commit at the end.
+
+- After each logical group of related tasks passes typecheck + biome, make a focused commit before moving on.
+- Use conventional prefixes: `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`.
+- Target ~3–5 commits per multi-task feature. Not 1 (review-hostile), not 20 (noise).
+- Don't push to remote until the user asks. Local commits are cheap and bisect-friendly.
+- Don't include Claude as a co-author.
+
+The reason: reviewable history. Each commit should represent a coherent unit (e.g., "schema + flag + prompt", "filter logic", "render-side wiring") so the user can scan, bisect, or revert any single layer without losing the rest.
+
 ## Project Structure
 
 ```
