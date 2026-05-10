@@ -1,56 +1,70 @@
 #!/usr/bin/env bash
-# Re-inject critical stack patterns and git state after context compaction.
-# Without this, Claude loses awareness of key conventions when the context
-# window is compressed in long sessions.
+# Re-anchor git state after context compaction. The compaction summary is
+# model-written under token pressure and can paraphrase commit messages,
+# drop SHAs, or hallucinate work Claude "intended" to commit. `git` is
+# ground truth — surface it so Claude doesn't pile new work on unsaved
+# changes or redo code that's already shipped.
+#
+# We deliberately do NOT re-inject CLAUDE.md content here. CLAUDE.md is in
+# the system reminder block and survives compaction; duplicating it costs
+# tokens for content that was never lost. Put project-specific reminders
+# in CLAUDE.md, not in this hook.
 
-# Inject current git state so Claude knows where it left off
+set -u
+
 BRANCH=$(git -C "$CLAUDE_PROJECT_DIR" branch --show-current 2>/dev/null)
-if [[ -n "$BRANCH" ]]; then
-	RECENT=$(git -C "$CLAUDE_PROJECT_DIR" log main..HEAD --oneline 2>/dev/null | head -8)
-	UNCOMMITTED=$(git -C "$CLAUDE_PROJECT_DIR" diff --name-only HEAD 2>/dev/null)
-	UNCOMMITTED_COUNT=$(echo "$UNCOMMITTED" | grep -c '.' 2>/dev/null || echo 0)
-	[[ -z "$UNCOMMITTED" ]] && UNCOMMITTED_COUNT=0
+[[ -z "$BRANCH" ]] && exit 0
 
-	echo "### Git state at compaction"
-	echo "Branch: $BRANCH"
-	if [[ -n "$RECENT" ]]; then
-		echo "Commits on this branch:"
-		echo "$RECENT" | sed 's/^/  /'
+# Pick a sensible base for "what's on this branch" — main, master, or
+# fall back to the previous commit if neither exists.
+for CANDIDATE in main master; do
+	if git -C "$CLAUDE_PROJECT_DIR" rev-parse --verify --quiet "$CANDIDATE" >/dev/null; then
+		BASE="$CANDIDATE"
+		break
 	fi
-	if [[ "$UNCOMMITTED_COUNT" -gt 0 ]]; then
-		echo "Uncommitted ($UNCOMMITTED_COUNT files): $(echo "$UNCOMMITTED" | tr '\n' ' ' | sed 's/ $//')"
-	fi
+done
+BASE="${BASE:-HEAD~1}"
+
+RECENT=$(git -C "$CLAUDE_PROJECT_DIR" log "$BASE..HEAD" --oneline 2>/dev/null | head -10)
+BRANCH_STAT=$(git -C "$CLAUDE_PROJECT_DIR" diff --stat "$BASE..HEAD" 2>/dev/null)
+UNSTAGED_STAT=$(git -C "$CLAUDE_PROJECT_DIR" diff --stat 2>/dev/null)
+STAGED_STAT=$(git -C "$CLAUDE_PROJECT_DIR" diff --stat --cached 2>/dev/null)
+UNTRACKED=$(git -C "$CLAUDE_PROJECT_DIR" ls-files --others --exclude-standard 2>/dev/null)
+
+echo "### Git state at compaction"
+echo "Branch: $BRANCH (base: $BASE)"
+
+if [[ -n "$RECENT" ]]; then
 	echo ""
+	echo "Commits on this branch:"
+	echo "$RECENT" | sed 's/^/  /'
 fi
 
-cat <<'EOF'
-## Stack — Critical Patterns Reminder
+if [[ -n "$BRANCH_STAT" ]]; then
+	echo ""
+	echo "Files changed on this branch (vs $BASE):"
+	echo "$BRANCH_STAT" | sed 's/^/  /'
+fi
 
-### TanStack Start
-- `getRouter()` must return a NEW instance each call (SSR isolation)
-- Route loaders run on BOTH client and server — use `createServerFn` for server-only ops
-- `viteReact()` MUST come AFTER `tanstackStart()` in Vite plugins
-- Never edit `routeTree.gen.ts` — it is auto-generated
+if [[ -n "$STAGED_STAT" ]]; then
+	echo ""
+	echo "Staged but not committed:"
+	echo "$STAGED_STAT" | sed 's/^/  /'
+fi
 
-### tRPC (new client API)
-- Use `useTRPC()` hook → `trpc.procedure.queryOptions()` with `useQuery()`
-- Use `trpc.procedure.mutationOptions()` with `useMutation()`
-- Only `useSuspenseQuery` participates in SSR — plain `useQuery` does NOT
+if [[ -n "$UNSTAGED_STAT" ]]; then
+	echo ""
+	echo "Uncommitted edits (unstaged):"
+	echo "$UNSTAGED_STAT" | sed 's/^/  /'
+fi
 
-### better-auth
-- `tanstackStartCookies()` MUST be the LAST plugin
-- Always pass `getRequestHeaders()` to `auth.api.getSession()` in server functions
-- Use client SDK for auth actions, server functions for session checks
+if [[ -n "$UNTRACKED" ]]; then
+	echo ""
+	echo "Untracked files:"
+	echo "$UNTRACKED" | sed 's/^/  /'
+fi
 
-### Zod 4 (import from zod/v4)
-- Use `.extend()` not `.merge()`
-- Use `z.email()`, `z.uuid()` (top-level) not `z.string().email()`
-- Use `z.treeifyError()` not `.format()` or `.flatten()`
-
-### Code Style (Biome enforced)
-- Named exports only (no default exports, except route/config files)
-- `import type {}` for type-only imports
-- Run `bun check:fix` before committing
-EOF
+echo ""
+echo "If any of this is news to you, the compaction summary may have drifted — trust git here."
 
 exit 0
