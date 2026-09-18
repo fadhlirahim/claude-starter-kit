@@ -16,6 +16,6 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:auth": "bunx auth@latest generate"
+    "db:auth": "bunx auth@1 generate"
   }
 }
