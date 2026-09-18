@@ -120,7 +120,7 @@
       "!**/node_modules",
       "!**/dist",
       "!**/.output",
-      "!**/.vinxi",
+      "!**/.nitro",
       "!**/*.gen.ts",
       "!**/routeTree.gen.ts",
       "!**/drizzle"

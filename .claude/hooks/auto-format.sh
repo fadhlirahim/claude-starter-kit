@@ -10,7 +10,7 @@ FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 [[ ! "$FILE_PATH" =~ \.(ts|tsx|js|jsx|mts|cts|json|css)$ ]] && exit 0
 
 # Skip generated and build directories
-[[ "$FILE_PATH" =~ /(node_modules|\.output|\.vinxi|dist|build)/ ]] && exit 0
+[[ "$FILE_PATH" =~ /(node_modules|\.output|\.nitro|dist|build)/ ]] && exit 0
 
 # Skip auto-generated route tree
 [[ "$FILE_PATH" =~ routeTree\.gen\.ts$ ]] && exit 0

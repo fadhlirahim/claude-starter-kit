@@ -6,7 +6,7 @@
 
 | Layer | Technology | Docs |
 |-------|-----------|------|
-| Framework | TanStack Start (Vite, Nitro) | tanstack.com/start |
+| Framework | TanStack Start (Vite plugin + Nitro) | tanstack.com/start |
 | Routing | TanStack Router (file-based) | tanstack.com/router |
 | Data Fetching | TanStack Query + tRPC | tanstack.com/query, trpc.io |
 | Forms | TanStack Form + Zod 4 | tanstack.com/form |
@@ -19,9 +19,9 @@
 ## Commands
 
 ```bash
-bun dev              # Start dev server (vinxi dev)
-bun build            # Production build (vinxi build)
-bun start            # Start production server
+bun dev              # Start dev server (vite dev)
+bun build            # Production build (vite build + nitro)
+bun start            # Start production server (node .output/server/index.mjs)
 bun check            # Biome check (lint + format)
 bun check:fix        # Biome auto-fix
 bun db:generate      # Generate Drizzle migrations
@@ -106,7 +106,7 @@ src/
 ### TanStack Start
 
 - IMPORTANT: `getRouter()` in `src/router.tsx` MUST return a NEW router instance each call (SSR request isolation)
-- IMPORTANT: In `vite.config.ts`, `viteReact()` MUST come AFTER `tanstackStart()` in the plugins array
+- IMPORTANT: In `vite.config.ts`, `viteReact()` MUST come AFTER `tanstackStart()` in the plugins array; add `nitro()` from `nitro/vite` between them for the production server. No Vinxi, no `app.config.ts`
 - IMPORTANT: Route loaders run on BOTH client and server — use `createServerFn` for server-only operations (env vars, secrets, direct DB access)
 - Use `createServerFn({ method: 'POST' })` for mutations, `createServerFn({ method: 'GET' })` for reads
 - Server functions support `.inputValidator()` for Zod validation
