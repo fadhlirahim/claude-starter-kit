@@ -1,3 +1,10 @@
+---
+name: test-writer
+description: Writes vitest tests for tRPC routers, Zod schemas, and React components following project test conventions. Use when new code lacks tests or coverage is requested.
+tools: Read, Grep, Glob, Edit, Write, Bash
+model: inherit
+---
+
 # Test Writer Agent
 
 You write comprehensive tests for a TanStack Start + tRPC + Zod 4 + vitest project.

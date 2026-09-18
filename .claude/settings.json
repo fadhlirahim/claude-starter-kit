@@ -48,7 +48,7 @@
           {
             "type": "command",
             "command": ".claude/hooks/git-context.sh",
-            "timeout": 10000
+            "timeout": 10
           }
         ]
       }
@@ -60,7 +60,7 @@
           {
             "type": "command",
             "command": ".claude/hooks/protect-sensitive.sh",
-            "timeout": 10000
+            "timeout": 10
           }
         ]
       }
@@ -72,12 +72,12 @@
           {
             "type": "command",
             "command": ".claude/hooks/auto-format.sh",
-            "timeout": 30000
+            "timeout": 30
           },
           {
             "type": "command",
             "command": ".claude/hooks/db-schema-reminder.sh",
-            "timeout": 10000
+            "timeout": 10
           }
         ]
       }
@@ -89,7 +89,7 @@
           {
             "type": "command",
             "command": ".claude/hooks/notify-macos.sh",
-            "timeout": 10000
+            "timeout": 10
           }
         ]
       }
@@ -101,7 +101,7 @@
           {
             "type": "command",
             "command": ".claude/hooks/session-context.sh",
-            "timeout": 10000
+            "timeout": 10
           }
         ]
       }
@@ -113,12 +113,12 @@
           {
             "type": "command",
             "command": ".claude/hooks/post-implement-review.sh",
-            "timeout": 15000
+            "timeout": 15
           },
           {
             "type": "command",
             "command": ".claude/hooks/stop-notify.sh",
-            "timeout": 10000
+            "timeout": 10
           }
         ]
       }

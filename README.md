@@ -27,7 +27,7 @@ package.json                       # Script definitions
 .gitignore                         # Standard ignores
 .claude/
   settings.json                    # Permissions, hooks, MCP servers
-  hooks/                           # 7 lifecycle hook scripts
+  hooks/                           # 8 lifecycle hook scripts
     auto-format.sh                 #   Biome format on every file edit
     protect-sensitive.sh            #   Block writes to .env, migrations, generated files
     db-schema-reminder.sh          #   Remind to migrate after schema/auth changes
@@ -200,7 +200,7 @@ The included `biome.json` enforces:
 - **Cognitive complexity limit** — warns at 15
 - **Sorted CSS classes** — (for Tailwind)
 - **Import organization** — automatic sorting and grouping
-- **Formatting** — tabs, single quotes, no semicolons, trailing commas, 100 char width
+- **Formatting** — 2-space indent, single quotes, no semicolons, trailing commas, 100 char width
 
 ## Permissions
 

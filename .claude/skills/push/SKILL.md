@@ -39,7 +39,7 @@ If currently on `main` or `master`:
   - Follows conventional commits (`feat:`, `fix:`, `refactor:`, `chore:`)
   - Matches the repository's existing commit style
   - Focuses on WHY, not WHAT
-  - Ends with `Co-Authored-By: Claude <noreply@anthropic.com>`
+  - Has NO `Co-Authored-By` trailer
 - Use a HEREDOC for the commit message
 
 ### 4. Push
@@ -67,9 +67,6 @@ gh pr create --title "<concise title under 70 chars>" --body "$(cat <<'EOF'
 - [ ] Types pass (`bun typecheck`)
 - [ ] Lint passes (`bun check`)
 - [ ] Tests pass (`bun test`)
-
----
-Generated with [Claude Code](https://claude.com/claude-code)
 EOF
 )"
 ```

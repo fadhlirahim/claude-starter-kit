@@ -25,7 +25,7 @@ Create a single git commit based on the above changes.
    - Follows conventional commits (`feat:`, `fix:`, `refactor:`, `chore:`)
    - Focuses on the WHY, not the WHAT
    - Is concise (1-2 sentences)
-   - Ends with `Co-Authored-By: Claude <noreply@anthropic.com>`
+   - Has NO `Co-Authored-By` trailer
 6. Use a HEREDOC for the commit message
 7. Run `git status` after to verify
 
