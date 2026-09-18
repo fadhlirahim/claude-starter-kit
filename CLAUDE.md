@@ -109,7 +109,7 @@ src/
 - IMPORTANT: In `vite.config.ts`, `viteReact()` MUST come AFTER `tanstackStart()` in the plugins array; add `nitro()` from `nitro/vite` between them for the production server. No Vinxi, no `app.config.ts`
 - IMPORTANT: Route loaders run on BOTH client and server — use `createServerFn` for server-only operations (env vars, secrets, direct DB access)
 - Use `createServerFn({ method: 'POST' })` for mutations, `createServerFn({ method: 'GET' })` for reads
-- Server functions support `.inputValidator()` for Zod validation
+- Server functions support `.validator()` for Zod validation (`.inputValidator()` is deprecated)
 - Use `createMiddleware({ type: 'function' })` for server function middleware
 - `routeTree.gen.ts` is auto-generated — NEVER edit it manually
 - Root layout (`__root.tsx`) uses `createRootRouteWithContext<{ queryClient: QueryClient }>()`
@@ -128,7 +128,7 @@ src/
 ```tsx
 // Search params with validation
 import { zodValidator, fallback } from '@tanstack/zod-adapter'
-import { z } from 'zod/v4'
+import { z } from 'zod'
 
 const searchSchema = z.object({
   page: fallback(z.number(), 1).default(1),
@@ -217,9 +217,9 @@ export const protectedProcedure = publicProcedure.use(isAuthed)
 
 ### Zod 4
 
-- Import from `zod/v4` — NEVER use bare `zod` import
+- Import from `zod` — with zod 4.x installed this IS v4. Never import `zod/v3`
 - Prefer top-level validators: `z.email()`, `z.url()`, `z.uuid()` over `z.string().email()` (tree-shakable)
-- Use `z.object()` for most schemas; `z.interface()` for key-level optionality
+- Use `z.object()` for all schemas — `z.interface()` was removed before 4.0 stable; use `.optional()` on fields
 - Use `error` param for custom error messages — NOT `message`, `invalid_type_error`, or `errorMap`
 - Use `z.treeifyError()` instead of `.format()` or `.flatten()` (deprecated in v4)
 - Use `.extend()` instead of `.merge()` for combining schemas
@@ -230,7 +230,7 @@ export const protectedProcedure = publicProcedure.use(isAuthed)
 
 ```tsx
 // src/lib/validators/user.ts
-import { z } from 'zod/v4'
+import { z } from 'zod'
 
 export const UserSchema = z.object({
   id: z.uuid(),
@@ -258,7 +258,7 @@ export type User = z.output<typeof UserSchema>
 - Protect routes via `beforeLoad` in `_authed.tsx` layout route, not per-page
 - Use `inferAdditionalFields<Auth>()` in client for type-safe additional user fields
 - Set `input: false` on sensitive `additionalFields` (role, permissions) to prevent user manipulation
-- After adding plugins: `bun db:auth && bun db:generate && bun db:migrate`
+- After adding plugins: `bun db:auth && bun db:generate && bun db:migrate` (CLI is `auth`, the old `@better-auth/cli` is deprecated)
 
 ```tsx
 // Auth guard in layout route (_authed.tsx)
@@ -281,7 +281,7 @@ export const Route = createFileRoute('/_authed')({
 - Use `db.insert()`, `db.update()`, `db.delete()` for writes
 - Always generate migrations with `bun db:generate` — never edit migrations manually
 - Use `$inferSelect` and `$inferInsert` for type inference from schema
-- Define relations for `experimental: { joins: true }` in better-auth (2-3x perf boost)
+- Define relations and enable `advanced: { database: { joins: true } }` in better-auth (2-3x perf boost; was `experimental.joins` before 1.7)
 
 ### Biome
 
@@ -305,7 +305,7 @@ export const Route = createFileRoute('/_authed')({
 - Don't use `React.FC` or `React.FunctionComponent`
 - Don't use default exports (except route files and config files)
 - Don't use `any` — use `unknown` and narrow
-- Don't use bare `zod` import — always use `zod/v4`
+- Don't import from `zod/v3` or use Zod 3 APIs — the project is on Zod 4
 - Don't use `.merge()` on Zod schemas — use `.extend()` (v4 change)
 - Don't use `.format()` or `.flatten()` on ZodError — use `z.treeifyError()`
 - Don't access `process.env` in route loaders directly — loaders run on the client too; use `createServerFn`

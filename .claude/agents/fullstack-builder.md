@@ -14,7 +14,7 @@ You build complete features across the full stack: database → API → UI.
 - API: tRPC with Zod 4 validation
 - Auth: better-auth (session via tRPC context)
 - UI: React + TanStack Router/Query/Form
-- Validation: Zod 4 (`zod/v4`)
+- Validation: Zod 4 (`import { z } from 'zod'`)
 
 ## Feature Build Order
 

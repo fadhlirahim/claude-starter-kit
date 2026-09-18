@@ -157,6 +157,6 @@ Tell the user, concisely:
 
 - **Don't** add Tailwind, shadcn/ui, Sentry, analytics, or any library not in `CLAUDE.md`'s stack table. The kit is opinionated; ask the user before deviating.
 - **Don't** write `.env`, migration SQL, or `routeTree.gen.ts` — hooks block it and that's intentional.
-- **Don't** use `useEffect` for data fetching, default exports outside route files, or bare `zod` imports. If you catch yourself doing it, you're not following `CLAUDE.md`.
+- **Don't** use `useEffect` for data fetching, default exports outside route files, or Zod 3 APIs (`.merge()`, `.format()`, `z.string().email()`). If you catch yourself doing it, you're not following `CLAUDE.md`.
 - **Don't** create a `README.md` unless the user asks.
 - If a step fails (network, DB connection, version conflict), stop and surface the error — don't paper over it with `try/catch` or fallbacks.

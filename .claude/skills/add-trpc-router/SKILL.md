@@ -11,7 +11,7 @@ Create a new tRPC router for: **$ARGUMENTS**
 
 ### 1. Create Zod validators: `src/lib/validators/$0.ts`
 ```typescript
-import { z } from 'zod/v4'
+import { z } from 'zod'
 
 export const [Entity]Schema = z.object({
   id: z.uuid(),
@@ -28,7 +28,7 @@ export type [Entity] = z.output<typeof [Entity]Schema>
 
 ### 2. Create router: `src/server/trpc/routers/$0.ts`
 ```typescript
-import { z } from 'zod/v4'
+import { z } from 'zod'
 import { protectedProcedure, publicProcedure, router } from '../init'
 
 export const [name]Router = router({

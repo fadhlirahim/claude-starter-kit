@@ -11,7 +11,7 @@ Scaffold a new fullstack feature: **$ARGUMENTS**
 
 ### 1. Zod Validators: `src/lib/validators/$0.ts`
 ```
-import { z } from 'zod/v4'
+import { z } from 'zod'
 - Base schema, CreateSchema, UpdateSchema
 - Export inferred types
 - Use z.email(), z.uuid() etc (top-level Zod 4 validators)

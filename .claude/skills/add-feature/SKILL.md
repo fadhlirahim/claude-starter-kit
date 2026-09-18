@@ -10,7 +10,7 @@ Add a new feature to the application: $ARGUMENTS
 ## Steps
 
 1. **Understand**: Read CLAUDE.md conventions and explore related existing code
-2. **Schema first**: Define Zod 4 validators in `src/lib/validators/` (use `zod/v4`, prefer `z.email()`, `z.uuid()` etc)
+2. **Schema first**: Define Zod 4 validators in `src/lib/validators/` (import from `zod`, prefer `z.email()`, `z.uuid()` etc)
 3. **Database** (if needed): Add Drizzle schema in `src/server/db/schema.ts`, run `bun db:generate && bun db:migrate`
 4. **Backend**: Create tRPC router in `src/server/trpc/routers/`, wire into root router
 5. **Frontend**: Create route file(s) in `src/routes/`, components in `src/components/`
@@ -19,7 +19,7 @@ Add a new feature to the application: $ARGUMENTS
 ## Conventions Reminder
 
 - Named exports only (exception: route files)
-- Validate all inputs with Zod 4 (`zod/v4`)
+- Validate all inputs with Zod 4
 - Use `protectedProcedure` for authenticated endpoints
 - Use `useTRPC()` + `useQuery()`/`useMutation()` for data fetching
 - Invalidate queries after mutations

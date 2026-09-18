@@ -8,7 +8,7 @@
       "Bash(bun install*)",
       "Bash(bun add*)",
       "Bash(bunx drizzle-kit*)",
-      "Bash(bunx @better-auth/cli*)",
+      "Bash(bunx auth*)",
       "Bash(git status*)",
       "Bash(git diff*)",
       "Bash(git log*)",

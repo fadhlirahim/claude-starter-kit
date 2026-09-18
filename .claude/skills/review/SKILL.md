@@ -10,7 +10,7 @@ Review the code changes in this project for quality, correctness, and adherence 
 
 ## Review Checklist
 
-1. **Type Safety**: No `any` types, proper Zod 4 validation (`zod/v4` import), tRPC input schemas
+1. **Type Safety**: No `any` types, proper Zod 4 validation (no Zod 3 APIs), tRPC input schemas
 2. **Auth Security**: Protected routes use `_authed` layout, tRPC uses `protectedProcedure`, `getRequestHeaders()` passed to `auth.api.getSession()`
 3. **Data Fetching**: Uses tRPC + TanStack Query (new `useTRPC()` pattern), no raw fetch or useEffect for data
 4. **Server/Client Boundary**: No `process.env` in loaders (use `createServerFn`), `useSuspenseQuery` for SSR

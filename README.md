@@ -206,7 +206,7 @@ The included `biome.json` enforces:
 
 The settings pre-approve common safe operations so Claude doesn't ask permission repeatedly:
 
-**Allowed**: `bun run *`, `bun test`, `bun add`, `bunx biome`, `bunx drizzle-kit`, `bunx @better-auth/cli`, standard git operations (status, diff, log, add, commit, branch, checkout, stash), Context7 doc lookups
+**Allowed**: `bun run *`, `bun test`, `bun add`, `bunx biome`, `bunx drizzle-kit`, `bunx auth`, standard git operations (status, diff, log, add, commit, branch, checkout, stash), Context7 doc lookups
 
 **Denied**: `rm -rf /`, `git push --force`, `git reset --hard`, reading `.env` files
 

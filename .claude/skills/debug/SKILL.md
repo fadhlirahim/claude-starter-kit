@@ -20,7 +20,7 @@ Debug the specified issue systematically: $ARGUMENTS
    - Missing query invalidation after mutation
    - Auth session not available (missing `_authed` layout, or forgot `getRequestHeaders()`)
    - Stale TanStack Query cache
-   - Wrong Zod import (using `zod` instead of `zod/v4`)
+   - Zod 3 API or `zod/v3` import sneaking in (project is on Zod 4)
    - Using `.merge()` instead of `.extend()` (Zod 4 change)
    - `process.env` accessed in loader instead of `createServerFn`
    - `useQuery` used where `useSuspenseQuery` needed for SSR
