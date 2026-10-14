@@ -28,6 +28,7 @@ bun add \
   @tanstack/react-router @tanstack/react-router-devtools \
   @tanstack/react-start \
   @tanstack/react-query @tanstack/react-query-devtools \
+  @tanstack/react-router-ssr-query \
   @tanstack/react-form @tanstack/zod-adapter \
   @trpc/server @trpc/client @trpc/tanstack-react-query \
   better-auth \
@@ -75,7 +76,7 @@ export default defineConfig({
 })
 ```
 
-`resolve.tsconfigPaths` is built into Vite 7+, so `vite-tsconfig-paths` is not needed. The router code-gen plugin is bundled into `tanstackStart()`, so `@tanstack/router-plugin` is not needed either.
+TanStack Start 1.x requires Vite 8+. `resolve.tsconfigPaths` is built in, so `vite-tsconfig-paths` is not needed. The router code-gen plugin is bundled into `tanstackStart()`, so `@tanstack/router-plugin` is not needed either.
 
 Create `tsconfig.json` with `"strict": true`, `"jsx": "react-jsx"`, `"moduleResolution": "bundler"`, and a `@/*` path alias to `src/*`.
 
@@ -92,7 +93,18 @@ Don't run migrations yet — wait until after better-auth generates its schema (
 1. `src/server/auth.ts` — `betterAuth({...})` instance. Plugin order is critical: **`tanstackStartCookies()` must be LAST** in the `plugins` array.
 2. `src/lib/auth-client.ts` — `createAuthClient` from `better-auth/react` with `inferAdditionalFields<typeof auth>()`.
 3. `src/server/auth.server.ts` — `createServerFn` wrappers `getSession()` and `ensureSession()`. Both must pass `getRequestHeaders()` to `auth.api.getSession()`.
-4. `src/routes/api/auth/$.ts` — catch-all that mounts `auth.handler`.
+4. `src/routes/api/auth/$.ts` — server route that mounts `auth.handler`:
+
+   ```ts
+   export const Route = createFileRoute('/api/auth/$')({
+     server: {
+       handlers: {
+         GET: ({ request }) => auth.handler(request),
+         POST: ({ request }) => auth.handler(request),
+       },
+     },
+   })
+   ```
 
 Then generate and apply the schema:
 
@@ -109,7 +121,7 @@ If `bun db:auth` overwrites the file, re-add any domain tables underneath the au
 1. `src/server/trpc/init.ts` — `initTRPC.context<Context>().create({ transformer: superjson })`, export `router`, `publicProcedure`, `protectedProcedure` (with `isAuthed` middleware that throws `TRPCError({ code: 'UNAUTHORIZED' })` when `ctx.session` is missing).
 2. `src/server/trpc/router.ts` — empty `appRouter = router({})` with a `// merge sub-routers here` marker. Export `type AppRouter`.
 3. `src/server/trpc/client.ts` — `createTRPCContext<AppRouter>()`; export `TRPCProvider` and `useTRPC`.
-4. `src/routes/api/trpc/$.ts` — `fetchRequestHandler` catch-all; build `createContext` from the request headers (call `auth.api.getSession({ headers })`).
+4. `src/routes/api/trpc/$.ts` — server route (same `server.handlers` shape as the auth route) whose `GET`/`POST` call `fetchRequestHandler`; build `createContext` from the request headers (call `auth.api.getSession({ headers })`).
 
 ## Step 7 — Router and root layout
 

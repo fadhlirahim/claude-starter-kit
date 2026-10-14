@@ -6,7 +6,7 @@
 
 | Layer | Technology | Docs |
 |-------|-----------|------|
-| Framework | TanStack Start (Vite plugin + Nitro) | tanstack.com/start |
+| Framework | TanStack Start 1.x (Vite 8 plugin + Nitro) | tanstack.com/start |
 | Routing | TanStack Router (file-based) | tanstack.com/router |
 | Data Fetching | TanStack Query + tRPC | tanstack.com/query, trpc.io |
 | Forms | TanStack Form + Zod 4 | tanstack.com/form |
@@ -109,8 +109,9 @@ src/
 - IMPORTANT: In `vite.config.ts`, `viteReact()` MUST come AFTER `tanstackStart()` in the plugins array; add `nitro()` from `nitro/vite` between them for the production server. No Vinxi, no `app.config.ts`
 - IMPORTANT: Route loaders run on BOTH client and server — use `createServerFn` for server-only operations (env vars, secrets, direct DB access)
 - Use `createServerFn({ method: 'POST' })` for mutations, `createServerFn({ method: 'GET' })` for reads
-- Server functions support `.validator()` for Zod validation (`.inputValidator()` is deprecated)
+- Server functions support `.validator()` for Zod validation (`.inputValidator()` no longer exists)
 - Use `createMiddleware({ type: 'function' })` for server function middleware
+- API endpoints are server routes: `createFileRoute('/api/x')({ server: { handlers: { GET, POST } } })`. `createAPIFileRoute` and `createServerFileRoute` no longer exist
 - `routeTree.gen.ts` is auto-generated — NEVER edit it manually
 - Root layout (`__root.tsx`) uses `createRootRouteWithContext<{ queryClient: QueryClient }>()`
 
